@@ -6,16 +6,18 @@ class Interfaz {
 
     void mostrarMenu() {
 
+        Musica musica = new Musica();
+        musica.reproducir();
+
         int opcion;
 
         do {
 
-            System.out.println("\n===== GESTIÓN DE BIBLIOTECA =====");
+            System.out.println("\n===== BIBLIOTECA =====");
             System.out.println("1. Gestión de Libros");
             System.out.println("2. Gestión de Usuarios");
             System.out.println("3. Gestión de Préstamos");
-            System.out.println("4. Música");
-            System.out.println("5. Salir");
+            System.out.println("4. Salir");
             System.out.print("Seleccione una opción: ");
 
             opcion = teclado.nextInt();
@@ -38,18 +40,13 @@ class Interfaz {
                     break;
 
                 case 4:
-                    Musica musica = new Musica();
-                    musica.reproducir();
-                    break;
-
-                case 5:
-                    System.out.println("Gracias por usar el sistema.");
+                    System.out.println("Gracias por usar el gestionador.");
                     break;
 
                 default:
                     System.out.println("Opción no válida.");
             }
 
-        } while (opcion != 5);
+        } while (opcion != 4);
     }
 }
