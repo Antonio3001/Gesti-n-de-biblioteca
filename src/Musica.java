@@ -17,7 +17,8 @@ class Musica {
             clip = AudioSystem.getClip();
             clip.open(audio);
 
-            clip.loop(Clip.LOOP_CONTINUOUSLY);
+            clip.start(); // Inicia la reproducción
+            clip.loop(Clip.LOOP_CONTINUOUSLY); // Repetir indefinidamente
 
         } catch (Exception e) {
 
