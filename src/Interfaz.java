@@ -67,15 +67,6 @@ void mostrarMenu() {
         System.out.println(VINO + "----------------------------------------------------" + RESET);  
 
 
-                case 4:
-                    System.out.println("\nGracias por usar el sistema.");
-                    System.out.println("Hasta pronto.");
-                    break;
-
-                default:
-                    System.out.println("\nOpción no válida.");
-            }
-
         System.out.println(VERDE + " 1. Gestión de Libros" + RESET);  
         System.out.println(VERDE + " 2. Gestión de Usuarios" + RESET);  
         System.out.println(VERDE + " 3. Gestión de Préstamos" + RESET);  
