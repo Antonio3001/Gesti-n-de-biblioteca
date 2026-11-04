@@ -1,6 +1,6 @@
 import java.util.Scanner;
 
-class Interfaz {
+public class Interfaz {
 
     Scanner teclado = new Scanner(System.in);
 
@@ -15,47 +15,73 @@ class Interfaz {
     public static final String BLANCO = "\u001B[37m";
     public static final String NEGRITA = "\u001B[1m";
 
-    // COLOR VINO
+    // COLOR VINO Y GRIS
     public static final String VINO = "\u001B[38;5;52m";
+    public static final String GRIS = "\u001B[38;5;240m";
 
-    void mostrarMenu() {
+    // Método seguro para limpiar pantalla en Eclipse mediante saltos de línea
+    public void limpiarPantalla() {
+        for (int i = 0; i < 25; i++) {
+            System.out.println();
+        }
+    }
 
-        Musica musica = new Musica();
-        musica.reproducir();
+    public void mostrarMenu() {
+        // ===== PANTALLA INICIAL: INGRESAR NOMBRE =====
+        limpiarPantalla();
+        System.out.println(CYAN + "╔════════════════════════════════════════════════════════╗" + RESET);
+        System.out.println(CYAN + "║" + NEGRITA + BLANCO + "                 IDENTIFICACIÓN DE USUARIO              " + CYAN + "║" + RESET);
+        System.out.println(CYAN + "╚════════════════════════════════════════════════════════╝" + RESET);
+        System.out.print(AZUL + " ➤ Ingrese su nombre para continuar: " + RESET);
+        
+        String nombreUsuario = teclado.nextLine();
+        if (nombreUsuario.trim().isEmpty()) {
+            nombreUsuario = "Invitado";
+        }
 
-        int opcion;
+        // ===== REPRODUCIR MÚSICA JUSTO DESPUÉS DE INGRESAR EL NOMBRE =====
+        try {
+            Musica musica = new Musica();
+            musica.reproducir();
+        } catch (Exception e) {
+            // Evita que falle si la clase Musica no está presente
+        }
+
+        int opcion = 0;
 
         do {
+            limpiarPantalla();
 
-            System.out.println("\n");
+            // ===== TÍTULO ESTABLE Y ENMARCADO CON USUARIO ARRIBA =====
+            System.out.println(CYAN + "╔════════════════════════════════════════════════════════╗" + RESET);
+            System.out.println(CYAN + "║" + NEGRITA + BLANCO + "             SISTEMA DE GESTIÓN DE BIBLIOTECA           " + CYAN + "║" + RESET);
+            System.out.println(CYAN + "╠════════════════════════════════════════════════════════╣" + RESET);
+            System.out.println(MORADO + "                      PROYECTO FINAL JAVA                 " + RESET);
+            System.out.println(GRIS + "  👤 Usuario: " + BLANCO + nombreUsuario + RESET);
+            System.out.println(VINO + "--------------------------------------------------------" + RESET);
 
-            // ===== TÍTULO =====
-            System.out.println(CYAN + "██████╗ ██╗██████╗ ██╗     ██╗ ██████╗ ████████╗███████╗ ██████╗ █████╗ " + RESET);
-            System.out.println(CYAN + "██╔══██╗██║██╔══██╗██║     ██║██╔═══██╗╚══██╔══╝██╔════╝██╔════╝██╔══██╗" + RESET);
-            System.out.println(CYAN + "██████╔╝██║██████╔╝██║     ██║██║   ██║   ██║   █████╗  ██║     ███████║" + RESET);
-            System.out.println(CYAN + "██╔══██╗██║██╔══██╗██║     ██║██║   ██║   ██║   ██╔══╝  ██║     ██╔══██║" + RESET);
-            System.out.println(CYAN + "██████╔╝██║██████╔╝███████╗██║╚██████╔╝   ██║   ███████╗╚██████╗██║  ██║" + RESET);
-            System.out.println(CYAN + "╚═════╝ ╚═╝╚═════╝ ╚══════╝╚═╝ ╚═════╝    ╚═╝   ╚══════╝ ╚═════╝╚═╝  ╚═╝" + RESET);
+            System.out.println(VERDE + "  [1] Gestión de Libros" + RESET);
+            System.out.println(VERDE + "  [2] Gestión de Usuarios" + RESET);
+            System.out.println(VERDE + "  [3] Gestión de Préstamos" + RESET);
+            System.out.println(ROJO + "  [4] Salir del sistema" + RESET);
 
-            System.out.println(VINO + "====================================================" + RESET);
-            System.out.println(VINO + NEGRITA + "           SISTEMA DE GESTIÓN DE BIBLIOTECA" + RESET);
-            System.out.println(VINO + "====================================================" + RESET);
+            System.out.println(VINO + "--------------------------------------------------------" + RESET);
+            System.out.print(AZUL + " ➤ Seleccione una opción: " + RESET);
 
-            System.out.println(MORADO + "               PROYECTO FINAL JAVA" + RESET);
-            System.out.println(VINO + "----------------------------------------------------" + RESET);
-
-            System.out.println(VERDE + " 1. Gestión de Libros" + RESET);
-            System.out.println(VERDE + " 2. Gestión de Usuarios" + RESET);
-            System.out.println(VERDE + " 3. Gestión de Préstamos" + RESET);
-            System.out.println(ROJO + " 4. Salir" + RESET);
-
-            System.out.println(VINO + "----------------------------------------------------" + RESET);
-            System.out.print(AZUL + " Seleccione una opción: " + RESET);
-
-            opcion = teclado.nextInt();
+            try {
+                opcion = teclado.nextInt();
+                teclado.nextLine(); // Limpiar el buffer
+            } catch (Exception e) {
+                System.out.println(ROJO + "\n[!] Error: Debe ingresar un número válido." + RESET);
+                teclado.next(); // Limpiar entrada errónea
+                opcion = 0;
+                
+                System.out.println(AZUL + "\nPresione ENTER para continuar..." + RESET);
+                teclado.nextLine();
+                continue;
+            }
 
             switch (opcion) {
-
                 case 1:
                     Libro libro = new Libro();
                     libro.menuLibros();
@@ -72,12 +98,16 @@ class Interfaz {
                     break;
 
                 case 4:
-                    System.out.println(VERDE + "\nGracias por usar el sistema." + RESET);
-                    System.out.println(VERDE + "Hasta pronto." + RESET);
+                    limpiarPantalla();
+                    System.out.println(VERDE + "\n¡Gracias por usar el sistema, " + nombreUsuario + "!" + RESET);
+                    System.out.println(VERDE + "Hasta pronto.\n" + RESET);
+                    try { Thread.sleep(1000); } catch (Exception ex) {}
                     break;
 
                 default:
-                    System.out.println(ROJO + "\nOpción no válida." + RESET);
+                    System.out.println(ROJO + "\n[!] Opción no válida." + RESET);
+                    System.out.println(AZUL + "\nPresione ENTER para continuar..." + RESET);
+                    teclado.nextLine();
             }
 
         } while (opcion != 4);
