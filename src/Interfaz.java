@@ -1,82 +1,95 @@
 import java.util.Scanner;
 
-public class Interfaz {
+class Interfaz {
 
     Scanner teclado = new Scanner(System.in);
 
-    // ===== COLORES ANSI =====
+    // ===== PALETA CELESTE Y BLANCO =====
     public static final String RESET = "\u001B[0m";
-    public static final String ROJO = "\u001B[31m";
-    public static final String VERDE = "\u001B[32m";
-    public static final String AMARILLO = "\u001B[33m";
-    public static final String AZUL = "\u001B[34m";
-    public static final String MORADO = "\u001B[35m";
-    public static final String CYAN = "\u001B[36m";
-    public static final String BLANCO = "\u001B[37m";
     public static final String NEGRITA = "\u001B[1m";
+    
+    public static final String CELESTE = "\u001B[38;5;51m";   // Marcos y titulo en celeste
+    public static final String BLANCO = "\u001B[37m";                // Textos interiores en blanco
 
-    // COLOR VINO Y GRIS
-    public static final String VINO = "\u001B[38;5;52m";
-    public static final String GRIS = "\u001B[38;5;240m";
+    // Ancho interno fijo para garantizar simetria exacta en Eclipse
+    private final int ANCHO = 74;
 
-    // Método seguro para limpiar pantalla en Eclipse mediante saltos de línea
     public void limpiarPantalla() {
-        for (int i = 0; i < 25; i++) {
+        for (int i = 0; i < 3; i++) {
             System.out.println();
         }
     }
 
-    public void mostrarMenu() {
-        // ===== PANTALLA INICIAL: INGRESAR NOMBRE =====
+    void mostrarMenu() {
+        // ===== PANTALLA INICIAL: IDENTIFICACION =====
         limpiarPantalla();
-        System.out.println(CYAN + "╔════════════════════════════════════════════════════════╗" + RESET);
-        System.out.println(CYAN + "║" + NEGRITA + BLANCO + "                 IDENTIFICACIÓN DE USUARIO              " + CYAN + "║" + RESET);
-        System.out.println(CYAN + "╚════════════════════════════════════════════════════════╝" + RESET);
-        System.out.print(AZUL + " ➤ Ingrese su nombre para continuar: " + RESET);
-        
-        String nombreUsuario = teclado.nextLine();
-        if (nombreUsuario.trim().isEmpty()) {
-            nombreUsuario = "Invitado";
+        String nombreUsuario = "";
+
+        while (true) {
+            System.out.println(CELESTE + "╔" + repetirCaracter("═", ANCHO) + "╗" + RESET);
+            System.out.println(CELESTE + "║" + NEGRITA + BLANCO + centrar("IDENTIFICACION DE USUARIO", ANCHO) + CELESTE + "║" + RESET);
+            System.out.println(CELESTE + "╚" + repetirCaracter("═", ANCHO) + "╝" + RESET);
+            System.out.print(BLANCO + " > Ingrese su nombre (ej. alejandro434): " + RESET);
+            
+            nombreUsuario = teclado.nextLine().trim();
+
+            if (nombreUsuario.isEmpty()) {
+                nombreUsuario = "Invitado";
+                break;
+            } 
+            else if (!nombreUsuario.matches("^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ ]+$") || !nombreUsuario.matches(".*[a-zA-ZáéíóúÁÉÍÓÚñÑ].*")) {
+                limpiarPantalla();
+                System.out.println(BLANCO + "[!] Error: El nombre solo puede incluir letras y numeros (ej. alejandro434).\n" + RESET);
+            } else {
+                break; 
+            }
         }
 
-        // ===== REPRODUCIR MÚSICA JUSTO DESPUÉS DE INGRESAR EL NOMBRE =====
+        // ===== REPRODUCIR MUSICA =====
         try {
             Musica musica = new Musica();
             musica.reproducir();
-        } catch (Exception e) {
-            // Evita que falle si la clase Musica no está presente
-        }
+        } catch (Exception e) {}
 
         int opcion = 0;
 
         do {
             limpiarPantalla();
 
-            // ===== TÍTULO ESTABLE Y ENMARCADO CON USUARIO ARRIBA =====
-            System.out.println(CYAN + "╔════════════════════════════════════════════════════════╗" + RESET);
-            System.out.println(CYAN + "║" + NEGRITA + BLANCO + "             SISTEMA DE GESTIÓN DE BIBLIOTECA           " + CYAN + "║" + RESET);
-            System.out.println(CYAN + "╠════════════════════════════════════════════════════════╣" + RESET);
-            System.out.println(MORADO + "                      PROYECTO FINAL JAVA                 " + RESET);
-            System.out.println(GRIS + "  👤 Usuario: " + BLANCO + nombreUsuario + RESET);
-            System.out.println(VINO + "--------------------------------------------------------" + RESET);
-
-            System.out.println(VERDE + "  [1] Gestión de Libros" + RESET);
-            System.out.println(VERDE + "  [2] Gestión de Usuarios" + RESET);
-            System.out.println(VERDE + "  [3] Gestión de Préstamos" + RESET);
-            System.out.println(ROJO + "  [4] Salir del sistema" + RESET);
-
-            System.out.println(VINO + "--------------------------------------------------------" + RESET);
-            System.out.print(AZUL + " ➤ Seleccione una opción: " + RESET);
+            // ===== BLOQUE SUPERIOR: TITULO EN ARTE ASCII (Perfectamente alineado) =====
+            System.out.println(CELESTE + "╔" + repetirCaracter("═", ANCHO) + "╗" + RESET);
+            System.out.println(CELESTE + "║" + CELESTE + alinearIzquierda("  ██████╗ ██╗██████╗ ██╗     ██╗ ██████╗ ████████╗███████╗ ██████╗ █████╗  ", ANCHO) + CELESTE + "║" + RESET);
+            System.out.println(CELESTE + "║" + CELESTE + alinearIzquierda("  ██╔══██╗██║██╔══██╗██║     ██║██╔═══██╗╚══██╔══╝██╔════╝██╔════╝██╔══██╗ ", ANCHO) + CELESTE + "║" + RESET);
+            System.out.println(CELESTE + "║" + CELESTE + alinearIzquierda("  ██████╔╝██║██████╔╝██║     ██║██║   ██║   ██║   █████╗  ██║     ███████║ ", ANCHO) + CELESTE + "║" + RESET);
+            System.out.println(CELESTE + "║" + CELESTE + alinearIzquierda("  ██╔══██╗██║██╔══██╗██║     ██║██║   ██║   ██║   ██╔══╝  ██║     ██╔══██║ ", ANCHO) + CELESTE + "║" + RESET);
+            System.out.println(CELESTE + "║" + CELESTE + alinearIzquierda("  ██████╔╝██║██████╔╝███████╗██║╚██████╔╝   ██║   ███████╗╚██████╗██║  ██║ ", ANCHO) + CELESTE + "║" + RESET);
+            System.out.println(CELESTE + "║" + CELESTE + alinearIzquierda("  ╚═════╝ ╚═╝╚═════╝ ╚══════╝╚═╝ ╚═════╝    ╚═╝   ╚══════╝ ╚═════╝╚═╝  ╚═╝ ", ANCHO) + CELESTE + "║" + RESET);
+            System.out.println(CELESTE + "╠" + repetirCaracter("═", ANCHO) + "╣" + RESET);
+            System.out.println(CELESTE + "║" + NEGRITA + BLANCO + centrar("SISTEMA DE GESTION DE BIBLIOTECA", ANCHO) + CELESTE + "║" + RESET);
+            System.out.println(CELESTE + "╠" + repetirCaracter("═", ANCHO) + "╣" + RESET);
+            System.out.println(CELESTE + "║" + NEGRITA + BLANCO + centrar("PROYECTO FINAL JAVA", ANCHO) + CELESTE + "║" + RESET);
+            System.out.println(CELESTE + "╚" + repetirCaracter("═", ANCHO) + "╝" + RESET);
+            
+            // ===== BLOQUE INFERIOR: USUARIO Y OPCIONES =====
+            System.out.println(CELESTE + "╔" + repetirCaracter("═", ANCHO) + "╗" + RESET);
+            System.out.println(CELESTE + "║" + BLANCO + alinearIzquierda("  Usuario: " + nombreUsuario, ANCHO) + CELESTE + "║" + RESET);
+            System.out.println(CELESTE + "╠" + repetirCaracter("═", ANCHO) + "╣" + RESET);
+            System.out.println(CELESTE + "║" + BLANCO + alinearIzquierda("  [1] Gestion de Libros", ANCHO) + CELESTE + "║" + RESET);
+            System.out.println(CELESTE + "║" + BLANCO + alinearIzquierda("  [2] Gestion de Usuarios", ANCHO) + CELESTE + "║" + RESET);
+            System.out.println(CELESTE + "║" + BLANCO + alinearIzquierda("  [3] Gestion de Prestamos", ANCHO) + CELESTE + "║" + RESET);
+            System.out.println(CELESTE + "║" + BLANCO + alinearIzquierda("  [4] Salir", ANCHO) + CELESTE + "║" + RESET);
+            System.out.println(CELESTE + "╚" + repetirCaracter("═", ANCHO) + "╝" + RESET);
+            System.out.print(BLANCO + " > Seleccione una opcion: " + RESET);
 
             try {
                 opcion = teclado.nextInt();
-                teclado.nextLine(); // Limpiar el buffer
+                teclado.nextLine(); 
             } catch (Exception e) {
-                System.out.println(ROJO + "\n[!] Error: Debe ingresar un número válido." + RESET);
-                teclado.next(); // Limpiar entrada errónea
+                System.out.println(BLANCO + "\n[!] Error: Debe ingresar un numero valido." + RESET);
+                teclado.next(); 
                 opcion = 0;
                 
-                System.out.println(AZUL + "\nPresione ENTER para continuar..." + RESET);
+                System.out.println(BLANCO + "\nPresione ENTER para continuar..." + RESET);
                 teclado.nextLine();
                 continue;
             }
@@ -86,30 +99,60 @@ public class Interfaz {
                     Libro libro = new Libro();
                     libro.menuLibros();
                     break;
-
                 case 2:
                     Usuario usuario = new Usuario();
                     usuario.menuUsuarios();
                     break;
-
                 case 3:
                     Prestamo prestamo = new Prestamo();
                     prestamo.menuPrestamos();
                     break;
-
                 case 4:
                     limpiarPantalla();
-                    System.out.println(VERDE + "\n¡Gracias por usar el sistema, " + nombreUsuario + "!" + RESET);
-                    System.out.println(VERDE + "Hasta pronto.\n" + RESET);
-                    try { Thread.sleep(1000); } catch (Exception ex) {}
+                    // ===== PANTALLA DE DESPEDIDA ESTILIZADA =====
+                    System.out.println(CELESTE + "╔" + repetirCaracter("═", ANCHO) + "╗" + RESET);
+                    System.out.println(CELESTE + "║" + NEGRITA + BLANCO + centrar("SISTEMA DE GESTION DE BIBLIOTECA", ANCHO) + CELESTE + "║" + RESET);
+                    System.out.println(CELESTE + "╠" + repetirCaracter("═", ANCHO) + "╣" + RESET);
+                    System.out.println(CELESTE + "║" + BLANCO + centrar("¡Gracias por utilizar nuestro sistema, " + nombreUsuario + "!", ANCHO) + CELESTE + "║" + RESET);
+                    System.out.println(CELESTE + "║" + NEGRITA + CELESTE + centrar("¡Hasta pronto!", ANCHO) + CELESTE + "║" + RESET);
+                    System.out.println(CELESTE + "╚" + repetirCaracter("═", ANCHO) + "╝" + RESET);
+                    try { Thread.sleep(2500); } catch (Exception ex) {}
                     break;
-
                 default:
-                    System.out.println(ROJO + "\n[!] Opción no válida." + RESET);
-                    System.out.println(AZUL + "\nPresione ENTER para continuar..." + RESET);
-                    teclado.nextLine();
+                    System.out.println(BLANCO + "\n[!] Opcion no valida. Intente de nuevo." + RESET);
+                    try { Thread.sleep(900); } catch (Exception ex) {}
             }
 
         } while (opcion != 4);
+    }
+
+    // Metodos auxiliares compatibles con cualquier version de Java
+    private String repetirCaracter(String caracter, int veces) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < veces; i++) {
+            sb.append(caracter);
+        }
+        return sb.toString();
+    }
+
+    private String alinearIzquierda(String texto, int ancho) {
+        if (texto.length() >= ancho) return texto.substring(0, ancho);
+        StringBuilder sb = new StringBuilder(texto);
+        while (sb.length() < ancho) {
+            sb.append(" ");
+        }
+        return sb.toString();
+    }
+
+    private String centrar(String texto, int ancho) {
+        if (texto.length() >= ancho) return texto.substring(0, ancho);
+        int totalEspacios = ancho - texto.length();
+        int izq = totalEspacios / 2;
+        int der = totalEspacios - izq;
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < izq; i++) sb.append(" ");
+        sb.append(texto);
+        for (int i = 0; i < der; i++) sb.append(" ");
+        return sb.toString();
     }
 }
